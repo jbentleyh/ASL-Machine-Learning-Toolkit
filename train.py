@@ -32,8 +32,8 @@ def create_training_data():
                 training_data.append([new_array, class_num])
             except Exception as e:
                 pass
-
     return training_data
+
 
 training_data = create_training_data()
 random.shuffle(training_data)

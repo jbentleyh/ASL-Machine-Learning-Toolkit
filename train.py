@@ -1,9 +1,9 @@
 import os
-import cv2 # image operations
+import cv2
 import random
-import pickle # database
-import numpy as np # array operations
-import matplotlib.pyplot as plt # visualize data operations
+import pickle
+import numpy as np
+import matplotlib.pyplot as plt
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling2D

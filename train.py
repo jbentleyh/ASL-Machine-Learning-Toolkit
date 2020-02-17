@@ -12,13 +12,13 @@ IMAGE_SIZE = 80
 
 # Path to 'Train' folder containing folders of pics for each letter (A, B, C, D, etc.)
 DATADIR = 'Train'
-
 CATEGORIES = [
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
     'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
     'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
 ]
-        
+
+
 def create_training_data():
     training_data = []
     # Store all images of all categories in an single array
@@ -36,10 +36,6 @@ def create_training_data():
 
 
 def insert_data_to_database(X, y):
-    # Make all pics uniform resolution
-    X = np.array(X).reshape(-1, IMAGE_SIZE, IMAGE_SIZE, 1)
-    y = np.array(y)
-
     # Make and store the information a database
     pickle_out = open("X.pickle", "wb")
     pickle.dump(X, pickle_out)
@@ -54,15 +50,17 @@ def set_features_labels(training_data, X, y):
     for features, label in training_data:
         X.append(features)
         y.append(label)
+    # Make all pics uniform resolution
+    X = np.array(X).reshape(-1, IMAGE_SIZE, IMAGE_SIZE, 1)
+    y = np.array(y)
     return X, y
+
 
 training_data = create_training_data()
 random.shuffle(training_data)
 
-X = [] # Features
-y = [] # Labels
-
-set_features_labels(training_data, X, y)
+X, y = [] # X = Features, y = Labels
+X, y = set_features_labels(training_data, X, y)
 insert_data_to_database(X, y)
 
 X = pickle.load(open("X.pickle", "rb"))

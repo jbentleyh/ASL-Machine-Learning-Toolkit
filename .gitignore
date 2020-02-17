@@ -3,3 +3,5 @@
 datasets
 datasets/*
 .h5
+Test/*
+Train/*

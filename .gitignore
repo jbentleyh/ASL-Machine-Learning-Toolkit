@@ -2,3 +2,4 @@
 .vscode
 datasets
 datasets/*
+.h5

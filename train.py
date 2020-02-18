@@ -10,7 +10,7 @@ from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, Conv2D,
 
 IMAGE_SIZE = 80
 
-# Path to 'Train' Folder Containing Folders of pics (A, B, C, etc.)
+# Path to 'Train' folder containing folders of pics for each letter (A, B, C, D, etc.)
 DATADIR = 'path/to/train/folder'
 CATEGORIES = [
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 

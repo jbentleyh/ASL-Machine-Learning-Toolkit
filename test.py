@@ -3,10 +3,7 @@ import cv2
 import random
 import numpy as np
 import tensorflow as tf
-import matplotlib.pyplot as plt
 from keras.models import load_model
-from keras.preprocessing import image
-from keras import optimizers
 
 IMAGE_SIZE = 80
 

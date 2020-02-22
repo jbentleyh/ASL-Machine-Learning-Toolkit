@@ -8,7 +8,7 @@ from keras.models import load_model
 IMAGE_SIZE = 80
 
 # Path to 'Test' folder containing folders of pics for each letter (A, B, C, D, etc.)
-DATADIR = 'path/to/test/folder'
+DATADIR = 'path/to/Test/folder'
 CATEGORIES = [
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
     'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 

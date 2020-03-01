@@ -27,7 +27,7 @@ src
 │   └── A (Folder containing 'A' letter pictures)
 │   └── B (Folder ...)
 │   └── ...
-├── Train
+├── Test
 │   └── A (Folder containing 'A' letter pictures)
 │   └── B (Folder ... )
 │   └── ...

@@ -94,26 +94,27 @@ usage: gen_data.py [-h] [-s SIZE] [--min MIN] [--max MAX] [-d DATA]
 
 optional arguments:
   -h, --help            show this help message and exit
-  -s SIZE, --size SIZE  specify final image size
-  --min MIN             specify canny min value
-  --max MAX             specify canny max value
-  -d DATA, --data DATA  path to image data
+  -s SIZE, --size SIZE  specify final image size. default=80
+  --min MIN             specify canny min value. default=100
+  --max MAX             specify canny max value. default=200
+  -d DATA, --data DATA  path to image data. default=data/train/
   -o OUTPUT, --output OUTPUT
-                        path to save csv to
+                        path to save csv to. default=datasets/train/
 ```
+
 ### `train.py`
 ```
 usage: train.py [-h] [-d DATA] [-l LOG] [-m MODEL] [-s SIZE] [-e EPOCH]
 
 optional arguments:
   -h, --help            show this help message and exit
-  -d DATA, --data DATA  path to training dataset
-  -l LOG, --log LOG     path to log directory
+  -d DATA, --data DATA  path to training dataset. default=last modified in datasets/train/
+  -l LOG, --log LOG     path to log directory. default=logs/
   -m MODEL, --model MODEL
-                        path to model directory
-  -s SIZE, --size SIZE  specify training image size
+                        path to model directory. default=models/
+  -s SIZE, --size SIZE  specify training image size. default=80
   -e EPOCH, --epoch EPOCH
-                        specify number of epochs
+                        specify number of epochs. default=10
 ```
 ### `test.py`
 ```
@@ -121,9 +122,9 @@ usage: test.py [-h] [-d DATA] [-m MODEL] [-s SIZE] [-p]
 
 optional arguments:
   -h, --help            show this help message and exit
-  -d DATA, --data DATA  path to testing dataset
+  -d DATA, --data DATA  path to testing dataset. default=last modified in datasets/test/
   -m MODEL, --model MODEL
-                        path to model directory
-  -s SIZE, --size SIZE  specify training image size
+                        path to model directory. default=last modified in models/
+  -s SIZE, --size SIZE  specify training image size. default=80
   -p, --predict         output redictions
 ```

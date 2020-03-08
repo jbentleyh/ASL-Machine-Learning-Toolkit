@@ -2,70 +2,80 @@ import os
 import cv2
 import random
 import pickle
+import time
+import argparse
 import numpy as np
+import pandas as pd
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling2D
+from tensorflow.keras.callbacks import TensorBoard
 
-IMAGE_SIZE = 80
-
+IMAGESIZE = 80
+DATADIR = './datasets/train'
+LOGDIR = './logs'
+MODELDIR = './models'
+EPOCH = 10
 # Path to 'Train' folder containing folders of pics for each letter (A, B, C, D, etc.)
-DATADIR = 'path/to/Train/folder'
 CATEGORIES = [
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 
     'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 
-    'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+    'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    'NOTHING', 'SPACE', 'DEL'
 ]
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-d', '--data', help='path to training dataset', action='store', default=DATADIR)
+parser.add_argument('-l', '--log', help='path to log directory', action='store', default=LOGDIR)
+parser.add_argument('-m', '--model', help='path to model directory', action='store', default=MODELDIR)
+parser.add_argument('-s', '--size', help='specify training image size', type=int, default=IMAGESIZE)
+parser.add_argument('-e', '--epoch', help='specify number of epochs', type=int, default=EPOCH)
+args = parser.parse_args()
 
-def create_training_data():
-    training_data = []
-    # Store all images of all categories in an single array
-    for category in CATEGORIES:
-        path = os.path.join(DATADIR, category)
-        class_num = CATEGORIES.index(category)
-        for img in os.listdir(path):
-            try:
-                img_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_GRAYSCALE)
-                new_array = cv2.resize(img_array, (IMAGE_SIZE, IMAGE_SIZE))
-                training_data.append([new_array, class_num])
-            except Exception as e:
-                pass
-    return training_data
+class InvalidPathError(Exception):
+    """Raised when path to training dataset is invalid"""
+    pass
 
+def get_data(train_dir):
+    if os.path.isfile(train_dir):
+        data_path = train_dir
+    elif os.path.isdir(train_dir):
+        # get last modified file in directory
+        data_path = max([os.path.join(train_dir, file) for file in os.listdir(train_dir)], key=os.path.getctime)
+        if not os.isfile(data_path):
+            raise InvalidPathError
+    else:
+        raise InvalidPathError
 
-training_data = create_training_data()
-random.shuffle(training_data)
+    print(f"Reading {data_path} (May take a while)...")
+    data = pd.read_csv(data_path, delimiter=',').values[1:]
+    X_train = [[i[1:]] for i in data]
+    y_train = [i[:1] for i in data]
 
-X = [] # Features
-y = [] # Labels
-for features, label in training_data:
-    X.append(features)
-    y.append(label)
+    print("Shaping and shuffling data...")
+    data = list(zip(X_train, y_train))
+    random.shuffle(data)
 
-# Make all pics uniform resolution
-X = np.array(X).reshape(-1, IMAGE_SIZE, IMAGE_SIZE, 1)
-y = np.array(y)
+    X_train, y_train = zip(*data)
+    X_train = np.asarray(X_train).reshape(-1, args.size, args.size, 1)
+    y_train = np.asarray(y_train).reshape(-1)
 
-# Insert to db
-pickle_out = open("X.pickle", "wb")
-pickle.dump(X, pickle_out)
-pickle_out.close()
-pickle_out = open("y.pickle", "wb")
-pickle.dump(y, pickle_out)
-pickle_out.close()
+    return X_train, y_train
 
-# Load from db
-X = pickle.load(open("X.pickle", "rb"))
-y = pickle.load(open("y.pickle", "rb"))
+if not os.path.isdir(args.log):
+    os.makedirs(args.log)
+if not os.path.isdir(args.model):
+    os.makedirs(args.model)
 
-# Normalize the data
-X = X/255.0
+NAME = f"sign_model_cnn_64x2_{time.time()}_{args.size}px"
+tensorboard = TensorBoard(log_dir=f"{os.path.join(args.log, NAME)}")
+
+X_train, y_train = get_data(args.data)
 
 model = Sequential()
 
 # Layer 1
-model.add(Conv2D(64, (3,3), input_shape=X.shape[1:]))
+model.add(Conv2D(64, (3,3), input_shape=X_train.shape[1:]))
 model.add(Activation("relu"))
 model.add(MaxPooling2D(pool_size=(2,2)))
 
@@ -80,14 +90,18 @@ model.add(Activation("relu"))
 model.add(MaxPooling2D(pool_size=(2,2)))
 
 model.add(Flatten())
-model.add(Dense(64))
 
-model.add(Dense(26))
+model.add(Dense(64))
+model.add(Activation("relu"))
+
+model.add(Dense(29))
 model.add(Activation('softmax'))
+
 model.compile(loss='sparse_categorical_crossentropy',
              optimizer='adam',
              metrics=['accuracy'])
 
-model.fit(X, y, batch_size=5, epochs=10, validation_split=0.1)
+model.fit(X_train, y_train, batch_size=5, epochs=args.epoch, validation_split=0.1, callbacks=[tensorboard])
 
-model.save('sign_lang_model.h5')
+model.save(f"{os.path.join(args.model, NAME+'.h5')}")
+

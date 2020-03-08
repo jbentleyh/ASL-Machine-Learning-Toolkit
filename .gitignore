@@ -1,7 +1,17 @@
 *.h5
 .vscode
+data
+data/*
 datasets
 datasets/*
+models
+models/*
+logs
+logs/*
+notebooks
+notebooks/*
+tensorflow_env/
 .h5
+.ipynb_checkpoints/
 Test/*
 Train/*

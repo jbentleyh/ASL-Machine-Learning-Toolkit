@@ -3,3 +3,6 @@ Keras==2.3.1
 numpy==1.18.1
 opencv-python==4.1.2.30
 tensorflow==2.1.0
+jupyter==1.0.0
+argparse==1.4.0
+pandas==1.0.1

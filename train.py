@@ -42,7 +42,7 @@ def get_data(train_dir):
     elif os.path.isdir(train_dir):
         # get last modified file in directory
         data_path = max([os.path.join(train_dir, file) for file in os.listdir(train_dir)], key=os.path.getctime)
-        if not os.isfile(data_path):
+        if not os.path.isfile(data_path):
             raise InvalidPathError
     else:
         raise InvalidPathError

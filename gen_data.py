@@ -40,6 +40,8 @@ with open(f"{args.output}/sign_data_{time.time()}_{args.size}px.csv", "w", newli
     directories = sorted(os.listdir(args.data))
     for directory in directories:
         path = os.path.join(args.data, directory)
+        if not os.path.isdir(path):
+            continue
         images = sorted(os.listdir(path))
         for img in images:
             percent = int((images.index(img) + 1) / len(images) * 20)

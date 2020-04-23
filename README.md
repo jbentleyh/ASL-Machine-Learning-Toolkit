@@ -40,13 +40,26 @@ Once your folder structure is in place with your own dataset we are ready to con
 
 To generate your training dataset, simply use the command:
 
-`python gen_data.py`
+`python convert_data.py`
 
 To generate your testing dataset:
 
-`python gen_data.py -d data/test -o datasets/test`
+`python convert_data.py -d data/test -o datasets/test`
 
 Note: Datasets are saved to `datasets/train` and `datasets/test` as `.csv` files.  For each line of the `.csv`, the first value is the category and the remaining `image_size^2` values are greyscale values on a scale of 0 to 1.  The first line of the `.csv` file is ignored.
+
+# How do I generate custom data
+To start generating custom training data, use the command:
+
+`python gen_data.py`
+
+To generate custom testing data, use the command:
+
+`python gen_data.py -o data/test`
+
+Position your hand so that  it is covering all nine green squares and press the '1' key.  This will sample your skin tone for background subtraction.  Next position your hand into the sign you wish to create data for.  Once in position, press the key corresponding to the sign you are holding up.  The script will save the processed frame to the correct directory multiple times per second.  While holding the sign, move it up, down, left, and right while slightly rotating in either direction.  The goal is to capture the sign at different angles.  Once you are finished generating data for that sign, press the '2' key.   Repeat this process for every character.  Press the '0' key to quit.
+
+Note: To generate data for the NOTHING category, press the '.' key
 
 # How to Train your model
 Once your folder structure is in place with your own dataset we are ready to train the model.
@@ -81,6 +94,22 @@ To compare your model to previous models, use the command:
 ### `gen_data.py`
 ```
 usage: gen_data.py [-h] [-s SIZE] [--min MIN] [--max MAX] [-d DATA]
+                   [-o OUTPUT]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -s SIZE, --size SIZE  specify final image size. default=80
+  --speed SPEED         specify capture speed (smaller is fater)
+  --nohist              skip background subtraction
+  --min MIN             specify canny min value. default=100
+  --max MAX             specify canny max value. default=200
+  -o OUTPUT, --output OUTPUT
+                        path to save image to. default=data/train/
+```
+
+### `convert_data.py`
+```
+usage: convert_data.py [-h] [-s SIZE] [--min MIN] [--max MAX] [-d DATA]
                    [-o OUTPUT]
 
 optional arguments:

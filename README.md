@@ -1,4 +1,4 @@
-# American Sign Language Recognizer
+# Machine Learning for American Sign Language
 Train and test a machine learning model to recognize ASL.
 Datasets are not provided, but are very easy to add to the project.
 

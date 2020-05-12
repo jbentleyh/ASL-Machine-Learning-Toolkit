@@ -18,7 +18,7 @@ Table of Contents
 How to Install
 ==
 
-First we need to download all dependencies. It's good practice to do so inside a virtual environment, but it is not required. For more information on how to use a virtual environment, see https://virtualenv.pypa.io/en/latest/. Now, to install the dependencies, run the command:
+First, we need to download all dependencies. It's good practice to do so inside a virtual environment, but it is not required. For more information on how to use a virtual environment, see https://virtualenv.pypa.io/en/latest/. Now, to install the dependencies, run the command:
 
 ```
 pip install -r requirements.txt

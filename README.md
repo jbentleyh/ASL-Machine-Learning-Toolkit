@@ -35,6 +35,7 @@ By default, training and test image data is stored in `data/train` and `data/tes
 The intended file structure for the project goes as follows:
 ```
 src
+├── data
 ├── datasets
 │   ├── train
 │   │   └── ...

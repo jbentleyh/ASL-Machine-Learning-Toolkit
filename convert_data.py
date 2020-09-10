@@ -47,9 +47,6 @@ with open(f"{args.output}/sign_data_{time.time()}_{args.size}px.csv", "w", newli
             percent = int((images.index(img) + 1) / len(images) * 20)
             print(f"{directory}:\t{directories.index(directory)+1}/{len(directories)}\t[{('#' * percent) + (' ' * (20-percent))}] {percent * 5}%\r", end='')
             img_path = os.path.join(path, img)
-            #img_array = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-            #img_array = cv2.Canny(img_array, args.min, args.max)
-            #cv2.imwrite('./data/test/' + img + '.jpg', img_array)
             img_array = cv2.resize(img_array, (args.size, args.size))
             img_array = np.array(img_array).reshape(-1) / 255.0
             img_array = np.insert(img_array, 0, CATEGORIES.index(directory))
